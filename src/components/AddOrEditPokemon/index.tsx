@@ -145,7 +145,7 @@ export function AddOrEditPokemon({openModal, setOpenModal, pokemonId, refresh }:
                   multiple
                   id="tags-outlined"
                   options={objKeyPokemonType}
-                  getOptionLabel={(option) => option}
+                  getOptionLabel={(option) => PokemonType[option as keyof typeof PokemonType]}
                   filterSelectedOptions
                   {...field}
                   onChange={(_, newValue) => field.onChange(newValue)}
