@@ -7,12 +7,11 @@ import Button from "@mui/material/Button";
 import pokemonLogo from '../../assets/pokemon.png'
 import { AddOrEditPokemon } from '../AddOrEditPokemon';
 
-
 interface NavbarProps {
-  refresh: () => Promise<void>;
+  refresh: () => Promise<void>
 }
 
-export function Navbar({ refresh }: NavbarProps) {
+export function Navbar({ refresh }:NavbarProps) {
   const [openModal, setOpenModal] = useState(false);
 
   return (

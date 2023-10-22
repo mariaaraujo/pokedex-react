@@ -9,5 +9,5 @@ export type AddPokemon = {
 export const AddPokemonFormValidationsSchema = yup.object({
   name: yup.string().required("Este campo é obrigatório"),
   description: yup.string().required("Este campo é obrigatório"),
-  type: yup.array().of(yup.string())
+  type: yup.array().of(yup.string().required("Este campo é obrigatório")),
 });

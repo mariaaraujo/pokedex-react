@@ -10,12 +10,11 @@ import { AddOrEditPokemon } from "..";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
-  refresh: () => Promise<void>;
+  refresh: () => Promise<void>
 }
 
-export default function PokemonCard({pokemon, refresh }: PokemonCardProps) {
-  const { _id, name, description, type } = pokemon
-
+export default function PokemonCard({ pokemon, refresh }: PokemonCardProps) {
+  const { _id, name, description, type } = pokemon;
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
@@ -35,14 +34,14 @@ export default function PokemonCard({pokemon, refresh }: PokemonCardProps) {
             {type.map((item, index) => 
             <Box key={index} display='flex' padding='0.4rem' border='1px solid black' borderRadius='0.5rem'>
               <Typography sx={{fontSize: '0.8rem'}}>
-              {PokemonType[item]}
+              {PokemonType[item as keyof typeof PokemonType]}
               </Typography>
             </Box>
             )}
             </Box>
         </Box>
         <Box width='100%' display='flex' gap='1rem' paddingTop='1rem'>
-          <Button variant="contained">Editar</Button>
+          <Button variant="contained" onClick={() => setOpenModal(true)}>Editar</Button>
           <Button variant="contained" sx={{backgroundColor: '#FF1919', ':hover': {backgroundColor: '#FF3232'}}}>Excluir</Button>
         </Box>
       </CardContent>
@@ -52,7 +51,7 @@ export default function PokemonCard({pokemon, refresh }: PokemonCardProps) {
       <AddOrEditPokemon 
       openModal={openModal}
       setOpenModal={setOpenModal}
-      pokemonId={pokemon._id}
+      pokemonId={_id}
       refresh={refresh}
       />
     }
