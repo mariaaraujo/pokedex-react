@@ -1,12 +1,9 @@
 import { useState } from 'react'
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
 import { Pokemon } from "../../types";
 import { PokemonType } from "../../enums/type";
 import { AddOrEditPokemon } from "..";
+import { Box, Button, Card, CardContent, Modal, Typography } from "@mui/material";
+import axios from 'axios';
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -15,7 +12,33 @@ interface PokemonCardProps {
 
 export default function PokemonCard({ pokemon, refresh }: PokemonCardProps) {
   const { _id, name, description, type } = pokemon;
-  const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+  };
+
+  const deletePokemon = async () => {
+    const { status } = await axios.delete(`https://localhost:7026/api/pokemon/${_id}?_id=${_id}`);
+
+      if (status === 204)
+      {
+        refresh()
+        setOpenDeleteModal(false)
+      }
+  };
+
   return (
     <>
     <Card variant="outlined" sx={{ maxWidth: 345 }}>
@@ -41,19 +64,40 @@ export default function PokemonCard({ pokemon, refresh }: PokemonCardProps) {
             </Box>
         </Box>
         <Box width='100%' display='flex' gap='1rem' paddingTop='1rem'>
-          <Button variant="contained" onClick={() => setOpenModal(true)}>Editar</Button>
-          <Button variant="contained" sx={{backgroundColor: '#FF1919', ':hover': {backgroundColor: '#FF3232'}}}>Excluir</Button>
+          <Button variant="contained" onClick={() => setOpenEditModal(true)}>Editar</Button>
+          <Button variant="contained" sx={{backgroundColor: '#FF1919', ':hover': {backgroundColor: '#FF3232'}}} onClick={() => setOpenDeleteModal(true)}>Deletar</Button>
         </Box>
       </CardContent>
     </Card>
-
-    {openModal && 
+ 
+    {openEditModal && 
       <AddOrEditPokemon 
-      openModal={openModal}
-      setOpenModal={setOpenModal}
+      openModal={openEditModal}
+      setOpenModal={setOpenEditModal}
       pokemonId={_id}
       refresh={refresh}
       />
+    }
+
+    {openDeleteModal && 
+    <Modal
+    open={openDeleteModal}
+    onClose={() => setOpenDeleteModal(false)}
+    >
+      <>
+      <Box sx={{ ...style, width: 400 }}>
+        <Box display='flex' width='100%' justifyContent='center' padding='1rem 0 2rem 0'><Typography variant='h4'> Deletar Pokémon</Typography></Box>
+        <Box width='100%' display='flex' flexDirection='column' justifyContent='center'>
+          <Typography>Deseja realmente deletar este Pokémon?</Typography>
+          <Typography>Está ação é irreversível.</Typography>
+        </Box>
+        <Box paddingTop='2rem' width='100%' display='flex' justifyContent='center' gap='0.7rem'>
+          <Button variant='outlined' sx={{borderColor: '#FF1919', color: 'red', ':hover': {borderColor: '#FF3232'}}} onClick={() => setOpenDeleteModal(false)}>Cancelar</Button>
+          <Button variant='contained' sx={{backgroundColor: '#FF1919', ':hover': {backgroundColor: '#FF3232'}}} onClick={() => deletePokemon()}>Deletar</Button>
+        </Box>
+      </Box>
+      </>
+    </Modal>
     }
     </>
   );

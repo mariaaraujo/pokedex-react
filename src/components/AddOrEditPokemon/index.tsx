@@ -116,7 +116,7 @@ export function AddOrEditPokemon({openModal, setOpenModal, pokemonId, refresh }:
     >
     <>
       <Box sx={{ ...style, width: 400 }}>
-      <Box display='flex' width='100%' justifyContent='center' padding='1rem 0 2rem 0'><Typography variant='h4'> {pokemonId ? 'Adicionar' : 'Editar'} Pokémon</Typography></Box>
+      <Box display='flex' width='100%' justifyContent='center' padding='1rem 0 2rem 0'><Typography variant='h4'> {updateMode ? 'Editar' : 'Adicionar'} Pokémon</Typography></Box>
       <form onSubmit={handleSubmit(handleSubmitPokemon)}>
           <Box display='flex' flexDirection='column' gap='1rem'>
             <Box display='flex' gap='3.5rem' alignItems='center'>
@@ -163,7 +163,8 @@ export function AddOrEditPokemon({openModal, setOpenModal, pokemonId, refresh }:
                 <Typography color='red' fontSize='0.7rem'>{errors.type?.message}</Typography>
             </Box>
             <Box width='100%' display='flex' gap='3.5rem' justifyContent='center'>
-              <Button type="submit" variant='contained'>Enviar</Button>
+              <Button type="button" variant='outlined' onClick={() => setOpenModal(false)}>Cancelar</Button>
+              <Button type="submit" variant='contained'>{updateMode ? 'Editar' : 'Adicionar'}</Button>
             </Box>
           </Box>
         </form>
